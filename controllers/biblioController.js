@@ -106,7 +106,7 @@ class biblioController {
   }
   static async deleteBook(req, res) {
     try {
-      await Biblio.deleteBook(req.params.id); // Llama al modelo para eliminar el libro por ID
+      await Biblio.deleteBook(req.params.id); // Llama al modelo para eliminar el libro por el ID
       res.status(204).json(); // Mensaje de éxito
     } catch (error) {
       res.status(404).json({ message: "Libro no encontrado" });

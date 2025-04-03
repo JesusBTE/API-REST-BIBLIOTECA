@@ -64,5 +64,5 @@ class Biblio {
   }
 }
 
-// Exportamos la clase libro para su uso en el controlador
+// Exportamos la clase de libro para su uso en el controlador
 module.exports = Biblio;

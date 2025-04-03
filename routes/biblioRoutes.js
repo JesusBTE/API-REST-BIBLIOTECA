@@ -24,5 +24,5 @@ router.put("/:id", biblioController.updateBook);
 // Eliminar un libro por su ID
 router.delete("/:id", biblioController.deleteBook);
 
-// Exportamos el router para que pueda ser utilizado en la aplicación principal
+// Exportamos el router para que este pueda ser utilizado en la aplicación principal
 module.exports = router;
