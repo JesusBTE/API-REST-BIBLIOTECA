@@ -2,14 +2,14 @@
 const express = require("express");
 const app = express();
 
-// Importamos las rutas de eventos
+// Importamos las rutas de libros
 const biblioRoutes = require("./routes/bilbioRoutes");
 
 // Middleware para parsear JSON en las solicitudes
 app.use(express.json());
 
 // Definimos la ruta base para la API de Biblioteca
-app.use("/apiV1/biblioteca", biblioRoutes);
+app.use("/apiV1/libros", biblioRoutes);
 
 // Definimos el puerto en el que se ejecutará el servidor
 const PORT = process.env.PORT || 3001;

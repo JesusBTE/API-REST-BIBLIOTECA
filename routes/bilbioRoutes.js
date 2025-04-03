@@ -2,25 +2,27 @@
 const express = require("express");
 const router = express.Router();
 
-// Importamos el controlador de eventos
+// Importamos el controlador de biblioteca
 const biblioController = require("../controllers/biblioController");
 
-// Definimos las rutas para gestionar las eventos
+// Definimos las rutas para gestionar todos los libros
 
-// Obtener todas las eventos
+// Obtener todas los libros
+
+// Crear un libro
 router.post("/", biblioController.createBook);
 
-// Obtener una evento por su ID
-/*router.get("/:id",  eventController.getEventById);
+// Obtener un libro por su ID
+router.get("/", biblioController.getBooks);
 
-// Crear una nueva evento
-router.post("/",   eventController.createEvent);
+// Obtener un libro por su ID
+router.get("/:id", biblioController.getBookById);
 
-// Actualizar una evento por su ID
-router.put("/:id",  eventController.updateEvent);
+// Actualizar un libro por su ID
+router.put("/:id", biblioController.updateBook);
 
-// Eliminar una evento por su ID
-router.delete("/:id",  eventController.deleteEvent);*/
+// Eliminar un libro por su ID
+router.delete("/:id", biblioController.deleteBook);
 
 // Exportamos el router para que pueda ser utilizado en la aplicación principal
 module.exports = router;
