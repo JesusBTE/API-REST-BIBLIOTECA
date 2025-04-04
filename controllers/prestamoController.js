@@ -25,10 +25,10 @@ class PrestamoController {
   // Método para crear un nuevo préstamo
   static async createPrestamo(req, res) {
     try {
-      const { prestamoId, libroId, usuarioId, fechaInicio, fechaFin, devuelto } = req.body;
+      const {usuarioId, fechaInicio, fechaFin, devuelto } = req.body;
 
       // Validar que los datos obligatorios estén presentes
-      if (!prestamoId || !libroId || !usuarioId || !fechaInicio || !fechaFin) {
+      if (!libroId || !usuarioId || !fechaInicio || !fechaFin || !devuelto) {
         return res.status(400).json({ error: "Datos inválidos" });
       }
 
