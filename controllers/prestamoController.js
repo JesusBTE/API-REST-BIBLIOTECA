@@ -1,5 +1,7 @@
 // Importamos el modelo Prestamo para interactuar con la base de datos
 const Prestamo = require("../models/prestamo");
+const admin = require("firebase-admin");
+const db = admin.firestore();
 
 class PrestamoController {
   // Método para obtener todos los préstamos
