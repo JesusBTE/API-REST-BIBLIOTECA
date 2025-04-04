@@ -25,7 +25,7 @@ class PrestamoController {
   // Método para crear un nuevo préstamo
   static async createPrestamo(req, res) {
     try {
-      const {usuarioId, fechaInicio, fechaFin, devuelto } = req.body;
+      const {libroId, usuarioId, fechaInicio, fechaFin, devuelto } = req.body;
 
       // Validar que los datos obligatorios estén presentes
       if (!libroId || !usuarioId || !fechaInicio || !fechaFin || !devuelto) {
