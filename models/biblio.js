@@ -1,4 +1,5 @@
 const admin = require("../config/config"); // Asegúrate de que la ruta sea correcta
+const Prestamo = require("./prestamo"); // <-- esta línea importa correctamente
 
 const db = admin.firestore();
 module.exports = db;
@@ -35,32 +36,47 @@ class Biblio {
 
   // Verifica si un libro tiene préstamos activos
   static async hasActiveLoans(libroId) {
-    const prestamosSnapshot = await prestamosCollection
+    const snapshot = await db
+      .collection("prestamos")
       .where("libroId", "==", libroId)
-      .where("devuelto", "==", false)
+      .where("activo", "==", true)
       .get();
 
-    return !prestamosSnapshot.empty; // Devuelve true si hay préstamos activos
+    return !snapshot.empty;
   }
 
+  // Método estático para eliminar un libro por su ID
   static async deleteBook(id) {
+    // Referencia al documento del libro dentro de la colección
     const docRef = collection.doc(id);
-    const doc = await docRef.get(); // Obtener el documento antes de eliminar
 
+    // Se obtiene el documento (libro) con el ID proporcionado
+    const doc = await docRef.get();
+
+    // Si el documento no existe, se lanza un error con estado 404
     if (!doc.exists) {
-      throw new Error("Libro no encontrado"); // Si no existe, lanzamos un error
+      throw {
+        status: 404,
+        message: "Libro no encontrado",
+      };
     }
 
-    // Verificar préstamos activos antes de eliminar
+    // Se verifica si el libro tiene préstamos activos
     const tienePrestamosActivos = await Biblio.hasActiveLoans(id);
+
+    // Si tiene préstamos activos, no se permite eliminar y se lanza error con estado 409 (conflicto)
     if (tienePrestamosActivos) {
       throw {
         status: 409,
         message: "No se puede eliminar por estar asociado a préstamos activos.",
       };
     }
-    await docRef.delete(); // Ahora sí lo eliminamos
-    return { id, message: "Libro eliminado" }; // Retornamos un mensaje confirmando la eliminación
+
+    // Si el libro existe y no tiene préstamos activos, se procede a eliminar
+    await docRef.delete();
+
+    // Se retorna una respuesta indicando que el libro fue eliminado
+    return { id, message: "Libro eliminado" };
   }
 }
 
