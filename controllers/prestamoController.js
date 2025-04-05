@@ -1,5 +1,7 @@
 // Importamos el modelo Prestamo para interactuar con la base de datos
 const Prestamo = require("../models/prestamo");
+const admin = require("firebase-admin");
+const db = admin.firestore();
 
 class PrestamoController {
   // Método para obtener todos los préstamos
@@ -25,10 +27,18 @@ class PrestamoController {
   // Método para crear un nuevo préstamo
   static async createPrestamo(req, res) {
     try {
-      const { prestamoId, libroId, usuarioId, fechaInicio, fechaFin, devuelto } = req.body;
+      const {libroId, usuarioId, fechaInicio, fechaFin, devuelto } = req.body;
+
+      const prestamoData = {
+        libroId,
+        usuarioId,
+        fechaInicio,
+        fechaFin,
+        devuelto: String(devuelto) === "true" // se guarda como booleano real
+      };
 
       // Validar que los datos obligatorios estén presentes
-      if (!prestamoId || !libroId || !usuarioId || !fechaInicio || !fechaFin) {
+      if (!libroId || !usuarioId || !fechaInicio || !fechaFin || !devuelto) {
         return res.status(400).json({ error: "Datos inválidos" });
       }
 
@@ -53,12 +63,15 @@ class PrestamoController {
       const prestamosSnapshot = await prestamosRef.where("libroId", "==", libroId).where("devuelto", "==", false).get();
 
       if (!prestamosSnapshot.empty) {
-        return res.status(409).json({ error: "El libro no está disponible" });
+        return res.status(409).json({ error: "Libro no está disponible" });
       }
 
       // Si pasa todas las validaciones, se guarda el préstamo
-      const newPrestamo = await Prestamo.createPrestamo(req.body);
-      res.status(201).json(newPrestamo);
+      const newPrestamo = await Prestamo.createPrestamo(prestamoData);
+      res.status(201).json({
+        message: "Préstamo realizado correctamente.",
+        prestamo: newPrestamo
+      });
 
     } catch (error) {
       res.status(500).json({ error: error.message });
