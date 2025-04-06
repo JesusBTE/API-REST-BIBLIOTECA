@@ -18,6 +18,7 @@ Betancourt Espericueta Jesús Ismael - 21400654
 Aguilar Sánchez Carlos Daniel - 21400640
 
 Descripción
+
 Esta API permite administrar una biblioteca digital, gestionando libros, autores, usuarios y préstamos. Está diseñada siguiendo principios REST para facilitar su integración, escalabilidad y mantenimiento.
 
 Gestiones disponibles.
