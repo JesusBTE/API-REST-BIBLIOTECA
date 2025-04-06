@@ -1,5 +1,23 @@
 # API-REST-BIBLIOTECA
+Fecha de entrega:
 
+08 de abril del 2025
+
+Docente:
+
+M.C. Israel Arjona Vizcaíno
+
+Equipo:
+
+Natividad Aguilera Andrick Joksan - 21400736
+
+Cuevas Cruz Luis Angel Yael- 21400664
+
+Betancourt Espericueta Jesús Ismael - 21400654
+
+Aguilar Sánchez Carlos Daniel - 21400640
+
+Descripción
 Esta API permite administrar una biblioteca digital, gestionando libros, autores, usuarios y préstamos. Está diseñada siguiendo principios REST para facilitar su integración, escalabilidad y mantenimiento.
 
 Gestiones disponibles.
