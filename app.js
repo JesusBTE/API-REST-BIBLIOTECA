@@ -10,7 +10,7 @@ const prestamoRoutes = require("./routes/prestamoRoutes");
 app.use(express.json());
 
 // Definimos las rutas de la API
-app.use("/apiV1/biblioteca", biblioRoutes);
+app.use("/apiV1/libros", biblioRoutes);
 app.use("/apiV1/prestamos", prestamoRoutes);
 
 // Definimos el puerto en el que se ejecutará el servidor
