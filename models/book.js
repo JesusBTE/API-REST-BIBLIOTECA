@@ -6,7 +6,7 @@ module.exports = db;
 
 const collection = db.collection("libros");
 
-class Biblio {
+class Book {
   static async createBook(bookData) {
     const docRef = await collection.add(bookData);
     return { id: docRef.id, ...booktDataData };
@@ -62,7 +62,7 @@ class Biblio {
     }
 
     // Se verifica si el libro tiene préstamos activos
-    const tienePrestamosActivos = await Biblio.hasActiveLoans(id);
+    const tienePrestamosActivos = await Book.hasActiveLoans(id);
 
     // Si tiene préstamos activos, no se permite eliminar y se lanza error con estado 409 (conflicto)
     if (tienePrestamosActivos) {
@@ -81,4 +81,4 @@ class Biblio {
 }
 
 // Exportamos la clase de libro para su uso en el controlador
-module.exports = Biblio;
+module.exports = Book;

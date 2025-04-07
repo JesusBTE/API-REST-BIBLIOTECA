@@ -1,9 +1,9 @@
-const Biblio = require("../models/biblio");
+const Book = require("../models/book");
 const admin = require("../config/config");
 const db = admin.firestore();
 const collection = db.collection("libros");
 
-class biblioController {
+class bookController {
   static async createBook(req, res) {
     try {
       const bookData = req.body;
@@ -37,7 +37,7 @@ class biblioController {
   // Método para obtener todas los libros
   static async getBooks(req, res) {
     try {
-      const books = await Biblio.getAllBooks(); // Llama al modelo para obtener todas los libros
+      const books = await Book.getAllBooks(); // Llama al modelo para obtener todas los libros
       res.status(200).json({ message: "Lista de libros retornada", books }); // Devuelve la lista de libros en formato JSON
     } catch (error) {
       res.status(500).json({
@@ -57,7 +57,7 @@ class biblioController {
 
     try {
       // Llamar al modelo para buscar el libro por ID
-      const book = await Biblio.getBookById(id);
+      const book = await Book.getBookById(id);
 
       // Si el libro no existe
       if (!book) {
@@ -89,7 +89,7 @@ class biblioController {
     }
 
     // Buscar el libro actual en la base de datos usando el ID
-    const existingBook = await Biblio.getBookById(req.params.id); // Obtener el libro
+    const existingBook = await Book.getBookById(req.params.id); // Obtener el libro
 
     // Si el libro no existe, respondemos con un error
     if (!existingBook) {
@@ -106,7 +106,7 @@ class biblioController {
   }
   static async deleteBook(req, res) {
     try {
-      await Biblio.deleteBook(req.params.id); // Llama al modelo para eliminar el libro por el ID
+      await Book.deleteBook(req.params.id); // Llama al modelo para eliminar el libro por el ID
       res.status(204).json(); // Mensaje de éxito
     } catch (error) {
       res.status(404).json({ message: "Libro no encontrado" });
@@ -115,4 +115,4 @@ class biblioController {
 }
 
 // Exportamos la clase para que pueda ser utilizada en las rutas
-module.exports = biblioController;
+module.exports = bookController;

@@ -3,26 +3,26 @@ const express = require("express");
 const router = express.Router();
 
 // Importamos el controlador de biblioteca
-const biblioController = require("../controllers/biblioController");
+const bookController = require("../controllers/bookController");
 
 // Definimos las rutas para gestionar todos los libros
 
 // Obtener todas los libros
 
 // Crear un libro
-router.post("/", biblioController.createBook);
+router.post("/", bookController.createBook);
 
 // Obtener un libro por su ID
-router.get("/", biblioController.getBooks);
+router.get("/", bookController.getBooks);
 
 // Obtener un libro por su ID
-router.get("/:id", biblioController.getBookById);
+router.get("/:id", bookController.getBookById);
 
 // Actualizar un libro por su ID
-router.put("/:id", biblioController.updateBook);
+router.put("/:id", bookController.updateBook);
 
 // Eliminar un libro por su ID
-router.delete("/:id", biblioController.deleteBook);
+router.delete("/:id", bookController.deleteBook);
 
 // Exportamos el router para que este pueda ser utilizado en la aplicación principal
 module.exports = router;
