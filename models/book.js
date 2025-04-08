@@ -1,6 +1,5 @@
-const admin = require("../config/config"); // Asegúrate de que la ruta sea correcta
-const Prestamo = require("./prestamo"); // <-- esta línea importa correctamente
-
+const admin = require("../config/config"); 
+const Prestamo = require("./prestamo"); 
 const db = admin.firestore();
 module.exports = db;
 

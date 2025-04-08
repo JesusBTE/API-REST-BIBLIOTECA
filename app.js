@@ -6,6 +6,7 @@ const app = express();
 const biblioRoutes = require("./routes/bookRoutes");
 const prestamoRoutes = require("./routes/prestamoRoutes");
 const autorRoutes = require("./routes/autores");
+const userRoutes = require("./routes/userRoutes");
 
 // Middleware para parsear JSON en las solicitudes
 app.use(express.json());
@@ -14,6 +15,8 @@ app.use(express.json());
 app.use("/apiV1/libros", biblioRoutes);
 app.use("/apiV1/prestamos", prestamoRoutes);
 app.use("/apiV1/autores", autorRoutes);
+app.use("/apiV1/usuarios", userRoutes);
+
 
 // Definimos el puerto en el que se ejecutará el servidor
 const PORT = process.env.PORT || 3001;
