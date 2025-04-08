@@ -1,7 +1,7 @@
 const Autor = require("../models/autor");
 const admin = require("firebase-admin");
 const db = admin.firestore();
-
+const Book = require("../models/book");
 class AutorController {
   // Crear autor
   static async createAutor(req, res) {
@@ -46,6 +46,35 @@ class AutorController {
       res.status(500).json({ error: "Fallo al recuperar los datos" });
     }
   }
+// Agrega este método a la clase AutorController en controllers/autorController.js
+
+static async getLibrosByAutor(req, res) {
+  try {
+    const { autorId } = req.params;
+    
+    console.log(`Buscando libros para el autor ID: ${autorId}`); // Log para verificación
+    
+    // Validar ID del autor
+    if (!autorId || typeof autorId !== 'string') {
+      return res.status(400).json({ error: 'ID de autor inválido' });
+    }
+    
+    const libros = await Book.getBooksByAutor(autorId);
+    
+    if (libros === null) {
+      return res.status(404).json({ error: 'Autor no registrado' });
+    }
+    
+    if (libros.length === 0) {
+      return res.status(200).json({ message: 'El autor no tiene libros registrados', libros: [] });
+    }
+    
+    res.status(200).json(libros);
+  } catch (error) {
+    console.error('Error al obtener libros por autor:', error);
+    res.status(500).json({ error: 'Error al obtener libros del autor' });
+  }
+}
 }
 
 module.exports = AutorController;

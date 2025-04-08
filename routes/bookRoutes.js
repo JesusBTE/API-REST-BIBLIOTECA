@@ -24,5 +24,9 @@ router.put("/:id", bookController.updateBook);
 // Eliminar un libro por su ID
 router.delete("/:id", bookController.deleteBook);
 
+// Agrega estas rutas al final del archivo
+router.get("/search/s", bookController.searchBooks);
+router.get("/:libroId/disponibilidad", bookController.checkAvailability);
+
 // Exportamos el router para que este pueda ser utilizado en la aplicación principal
 module.exports = router;

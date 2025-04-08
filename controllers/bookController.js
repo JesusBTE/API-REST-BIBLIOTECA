@@ -112,6 +112,70 @@ class bookController {
       res.status(404).json({ message: "Libro no encontrado" });
     }
   }
+
+
+static async checkAvailability(req, res) {
+  try {
+    const { libroId } = req.params;
+    
+    // Validar ID del libro
+    if (!libroId || typeof libroId !== 'string') {
+      return res.status(400).json({ error: 'ID de libro inválido' });
+    }
+    
+    const availability = await Book.checkAvailability(libroId);
+    
+    if (!availability) {
+      return res.status(404).json({ error: 'Libro no encontrado' });
+    }
+    
+    res.status(200).json(availability);
+  } catch (error) {
+    console.error('Error al verificar disponibilidad:', error);
+    res.status(500).json({ error: 'Error al verificar disponibilidad' });
+  }
+}
+
+static async searchBooks(req, res) {
+  try {
+    const { genero, autor, año, disponible } = req.query;
+    
+    // Validaciones
+    if (año && isNaN(parseInt(año))) {
+      return res.status(400).json({ error: 'El año debe ser un número válido' });
+    }
+    
+    const filters = {};
+    if (genero) filters.genero = genero;
+    if (autor) filters.autor = autor;
+    if (año) filters.año = parseInt(año);
+    if (disponible) filters.disponible = disponible === 'true';
+    
+    const books = await Book.searchBooks(filters);
+    
+    if (books.length === 0) {
+      return res.status(200).json({ 
+        message: 'No se encontraron libros con los criterios especificados',
+        results: []
+      });
+    }
+    
+    res.status(200).json({
+      message: 'Búsqueda exitosa',
+      count: books.length,
+      results: books
+    });
+  } catch (error) {
+    console.error('Error en búsqueda:', error);
+    res.status(500).json({ 
+      error: 'Error al buscar libros',
+      details: error.message 
+    });
+  }
+}
+
+
+
 }
 
 // Exportamos la clase para que pueda ser utilizada en las rutas
