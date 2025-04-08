@@ -15,13 +15,6 @@ class Book {
     const snapshot = await collection.get(); // Obtiene todos los documentos de la colección
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })); // Devuelve un array con los libros
   }
-  static async getBookById(id) {
-    const doc = await collection.doc(id).get(); // Obtiene el documento por ID
-    if (!doc.exists) {
-      return null; // Si no existe, devolvemos null en lugar de lanzar un error
-    }
-    return { id: doc.id, ...doc.data() }; // Si existe, devolvemos el libro con su ID y los datos
-  }
 
   static async updateBook(id, updatedData) {
     const bookData = await this.getBookById(id);
@@ -77,6 +70,90 @@ class Book {
     // Se retorna una respuesta indicando que el libro fue eliminado
     return { id, message: "Libro eliminado" };
   }
+
+static async getBookById(id) {
+  // Cambiamos para buscar por libroId en lugar del ID de Firebase
+  const snapshot = await collection.where('libroId', '==', id).get();
+  
+  if (snapshot.empty) {
+    return null;
+  }
+  
+  // Tomamos el primer documento (asumiendo que libroId es único)
+  const doc = snapshot.docs[0];
+  return { id: doc.id, ...doc.data() };
+}
+
+// En models/book.js (dejar solo una versión)
+static async searchBooks(filters = {}) {
+  console.log('Filtros recibidos en modelo:', filters);
+  let query = collection;
+  
+  
+  if (filters.genero) {
+    console.log(`Buscando por género: ${filters.genero}`);
+    query = query.where('genero', '==', filters.genero);
+  }
+  
+  if (filters.autor) {
+    const autoresSnapshot = await db.collection('autores')
+      .where('nombre', '>=', filters.autor)
+      .where('nombre', '<=', filters.autor + '\uf8ff')
+      .get();
+    
+    const autorIds = autoresSnapshot.docs.map(doc => doc.id); // Cambiado a doc.id
+    if (autorIds.length > 0) {
+      query = query.where('autorId', 'in', autorIds);
+    } else {
+      return []; // No hay autores que coincidan
+    }
+  }
+  
+  if (filters.año) {
+    query = query.where('añoPublicacion', '==', parseInt(filters.año));
+  }
+  
+  if (filters.disponible !== undefined) {
+    query = query.where('existencia', '==', filters.disponible);
+  }
+  
+  const snapshot = await query.get();
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+}
+
+static async checkAvailability(libroId) {
+  const snapshot = await collection.where('libroId', '==', libroId).get();
+  
+  if (snapshot.empty) {
+    return null;
+  }
+  
+  const doc = snapshot.docs[0];
+  return { 
+    libroId: doc.data().libroId,
+    disponible: doc.data().existencia 
+  };
+}
+
+static async getBooksByAutor(autorId) {
+  // Verificar si el autor existe
+  const autorSnapshot = await db.collection('autores')
+    .where('autorId', '==', autorId)
+    .get();
+  
+  if (autorSnapshot.empty) {
+    return null;
+  }
+  
+  // Buscar libros del autor
+  const librosSnapshot = await collection
+    .where('autorId', '==', autorId)
+    .get();
+  
+  return librosSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+}
+
+
 }
 
 // Exportamos la clase de libro para su uso en el controlador
